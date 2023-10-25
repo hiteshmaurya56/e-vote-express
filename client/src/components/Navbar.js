@@ -2,13 +2,19 @@ import React from "react";
 import "../css/navbar.css";
 import logo from "./logo.png";
 import { ToastContainer } from "react-toastify";
+import "../css/toast.css";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
+
   return (
     <>
       <ToastContainer
         position="top-center"
         autoClose={5000}
+        style={{ fontSize: "1.5em" }}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -25,26 +31,50 @@ const Navbar = () => {
         <nav className="navbar">
           <ul className="navbar-list">
             <li>
-              <a className="navbar-link" href="/">
-                Home
-              </a>
+              {sessionStorage.getItem("uname") != "Admin" ? (
+                <a className="navbar-link" href="/">
+                  Home
+                </a>
+              ) : (
+                <a className="navbar-link" href="/elections">
+                  Elections
+                </a>
+              )}
             </li>
             <li>
-              <a className="navbar-link" href="/elections">
-                Elections
-              </a>
+              {sessionStorage.getItem("uname") == "Admin" ? (
+                <a className="navbar-link" href="/registrations">
+                  Registrations
+                </a>
+              ) : (
+                <a className="navbar-link" href="/elections">
+                  Elections
+                </a>
+              )}
             </li>
             <li>
-              <a className="navbar-link" href="/results">
-                Results
-              </a>
+              {sessionStorage.getItem("uname") == "Admin" ? (
+                <a className="navbar-link" href="/requests">
+                  Requests
+                </a>
+              ) : (
+                <a className="navbar-link" href="/results">
+                  Results
+                </a>
+              )}
             </li>
             <li>
-              <a className="navbar-link" href="/contactus">
-                Contact Us
-              </a>
+              {sessionStorage.getItem("uname") == "Admin" ? (
+                <a className="navbar-link" href="/allusers">
+                  All Users
+                </a>
+              ) : (
+                <a className="navbar-link" href="/contactus">
+                  Contact Us
+                </a>
+              )}
             </li>
-            {!localStorage.getItem("token") ? (
+            {!sessionStorage.getItem("token") ? (
               <li>
                 <a className="navbar-link" href="/login">
                   Login
@@ -52,8 +82,8 @@ const Navbar = () => {
               </li>
             ) : (
               <li>
-                <a className="navbar-link" href="/login">
-                  {localStorage.getItem("uname")}
+                <a className="navbar-link" href="/profile">
+                  {sessionStorage.getItem("uname")}
                 </a>
               </li>
             )}

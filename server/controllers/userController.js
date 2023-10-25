@@ -5,15 +5,18 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 
 const JWT_SECRET = "SaintMsgInsan";
-const { User } = db;
+const { User, PendingUser } = db;
 
 const createUser = async (req, res) => {
+  console.log(req.body);
   console.log(req.body.username);
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    let error = errors.array();
+    return res.status(400).json({ error: error[0].msg });
   }
-  let user = await User.findOne({
+  let user = await PendingUser.findOne({
     where: {
       [Op.or]: {
         username: req.body.username,
@@ -21,13 +24,23 @@ const createUser = async (req, res) => {
       },
     },
   });
-  if (user) {
+  let user2 = await User.findOne({
+    where: {
+      [Op.or]: {
+        username: req.body.username,
+        email: req.body.email,
+      },
+    },
+  });
+
+  if (user || user2) {
     return res
       .status(400)
       .json({ error: "This username or email already exists!" });
   }
-  const newUser = User.build(req.body);
+  const newUser = PendingUser.build(req.body);
   newUser.reg_date = new Date();
+
   if (!newUser.city) {
     newUser.city = "Indore";
   }
@@ -42,9 +55,10 @@ const createUser = async (req, res) => {
     const data = { id: newUser.username };
     const authToken = jwt.sign(data, JWT_SECRET);
 
-    res.json({ authToken });
+    res.status(200).json({ authToken });
   } catch (error) {
     console.log("Some error has occured", error);
+    return res.status(400).json({ error: "Some error has occured." });
   }
 };
 
@@ -78,10 +92,25 @@ const login = async (req, res) => {
     const data = { user: { id: user.username } };
 
     const authToken = jwt.sign(data, JWT_SECRET);
-    res.json({ authToken, name: user.first_name });
+    res.json({ authToken, username: user.username, name: user.first_name });
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Some error has occured");
   }
 };
-module.exports = { createUser, login };
+// ###################################################################
+const getUser = async (req, res) => {
+  const { username } = req.body;
+  console.log(username);
+  const user = await User.findOne({
+    where: {
+      username: username,
+    },
+  });
+  if (user) {
+    return res.status(200).json({ user });
+  } else {
+    return res.status(200).json({ error: true });
+  }
+};
+module.exports = { createUser, login, getUser };

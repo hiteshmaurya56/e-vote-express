@@ -1,23 +1,31 @@
 import React, { useContext, useEffect, useState } from "react";
 import "../css/ongoingelection.css";
 import ElectionContext from "../contexts/election/ElectionContext";
+import AlertContext from "../contexts/alert/AlertContext";
 const OngoingElection = () => {
   const { curElection } = useContext(ElectionContext);
+  const { successful, unSuccessful } = useContext(AlertContext);
   const { election_id, election_name } = curElection;
   const [vote, setVote] = useState({ username: "" });
+  const [error, setError] = useState(false);
 
   const [candidates, setCandidates] = useState([]);
   const getCandidates = async () => {
     console.log(election_id);
     const response = await fetch(
-      `http://localhost:5000/api/election/getallcandidates/${election_id}`,
+      `http://${process.env.REACT_APP_HOST}:5000/api/election/getallcandidates/${election_id}`,
       {
         method: "GET",
         headers: { "auth-token": localStorage.getItem("token") },
       }
     );
     const json = await response.json();
-    setCandidates(json.candidates);
+    console.log(json);
+    if (json.error) {
+      setError(json.error);
+    } else {
+      setCandidates(json.candidates);
+    }
   };
 
   useEffect(() => {
@@ -27,13 +35,28 @@ const OngoingElection = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     console.log(vote);
-    const response = await fetch("http://localhost:5000/api/election/vote", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // body: JSON.stringify({ election_id, username, candidate_username }),
-    });
+    const response = await fetch(
+      `http://${process.env.REACT_APP_HOST}:5000/api/election/vote`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          election_id,
+          username: sessionStorage.getItem("username"),
+          candidate_username: vote,
+        }),
+      }
+    );
+    const json = await response.json();
+    console.log(json);
+    if (json.success) {
+      successful("You have voted successfully");
+    } else {
+      unSuccessful(json.error);
+    }
   };
 
   const handleChange = (e) => {
@@ -60,7 +83,7 @@ const OngoingElection = () => {
     );
   };
 
-  return (
+  return error == false ? (
     <div className="voting">
       <h1>Election Name: {election_name}</h1>
       <h2>Election ID: {election_id}</h2>
@@ -91,6 +114,10 @@ const OngoingElection = () => {
         </tbody>
       </table>
     </div>
+  ) : (
+    <section className="admin">
+      <h1>{error}</h1>
+    </section>
   );
 };
 

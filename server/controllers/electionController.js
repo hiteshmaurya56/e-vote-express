@@ -2,12 +2,13 @@ const { json } = require("body-parser");
 const { Op } = require("sequelize");
 const db = require("../models");
 const { validationResult } = require("express-validator");
-const { User, Election, Candidate, Vote } = db;
+const { User, Election, Candidate, Vote, Request } = db;
 
 const create = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    let error = errors.array();
+    return res.status(400).json({ error: error[0].msg });
   }
 
   let newElection = await Election.findOne({
@@ -95,6 +96,7 @@ const getCandidates = async (req, res) => {
     }
     return res.status(200).json({ candidates });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: "Some error has occured." });
   }
 };
@@ -108,25 +110,87 @@ const vote = async (req, res) => {
       where: {
         [Op.and]: {
           election_id: election_id,
-          candidate_username: candidate_username,
           username: username,
         },
       },
     });
 
-    if (!vote) {
-      return res.status(400).json({ error: "You have already voted." });
+    if (vote) {
+      return res.status(200).json({ error: "You have already voted." });
     }
 
     await Vote.create({ username, election_id, candidate_username });
-    return res.status(400).json({ success: true });
+    let candidate = await Candidate.findOne({
+      where: {
+        username: candidate_username,
+      },
+    });
+    let voteCount = candidate.dataValues.vote_count;
+
+    await Candidate.update(
+      { vote_count: voteCount + 1 },
+      { where: { username: candidate_username } }
+    );
+
+    return res.status(200).json({ success: true });
   } catch (error) {
     return res.status(400).json({ error });
   }
 };
 
+// ################################################################
+
 const result = async (req, res) => {
-  res.json({ name: "Rahul Maurya" });
+  try {
+    let elections = await Election.findAll();
+    for (let i = 0; i < elections.length; i++) {
+      elections[i] = elections[i].dataValues;
+    }
+    console.log(elections);
+    for (let i = 0; i < elections.length; i++) {
+      let candidate = await Candidate.findAll({
+        where: {
+          election_id: elections[i].election_id,
+        },
+      });
+      for (let j = 0; j < candidate.length; j++) {
+        candidate[j] = candidate[j].dataValues;
+
+        let name = await User.findOne({
+          attributes: ["first_name", "last_name"],
+          where: {
+            username: candidate[j].username,
+          },
+        });
+        const { first_name, last_name } = name.dataValues;
+        candidate[j].name = first_name + " " + last_name;
+      }
+      elections[i].candidates = candidate;
+    }
+    return res.status(200).json({ elections });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error });
+  }
 };
 
-module.exports = { create, vote, result, getElections, getCandidates };
+// ################################################################
+const createRequest = async (req, res) => {
+  console.log(req.body);
+  try {
+    const request = await Request.create(req.body);
+    console.log(request);
+    res.status(200).json(request);
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+};
+
+module.exports = {
+  create,
+  vote,
+  result,
+  getElections,
+  getCandidates,
+  createRequest,
+};

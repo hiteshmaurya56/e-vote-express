@@ -17,8 +17,9 @@ module.exports = (sequelize, DataTypes) => {
         key: "election_id",
       },
     },
-    logo: {
-      type: DataTypes.BLOB("medium"),
+    vote_count: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
   });
 

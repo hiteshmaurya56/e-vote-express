@@ -14,6 +14,7 @@ const SignUp = () => {
     uName: "",
     email: "",
     password: "",
+    cpassword: "",
     city: "",
     pinCode: "",
   });
@@ -28,26 +29,40 @@ const SignUp = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const { uName, fName, lName, email, password, dob, pinCode } = credentials;
-    const response = await fetch("http://localhost:5000/api/auth/createuser", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: uName,
-        first_name: fName,
-        last_name: lName,
-        email,
-        password,
-        dob,
-        pin_code: pinCode,
-      }),
-    });
+    const { uName, fName, lName, email, password, dob, pinCode, cpassword,city } =
+      credentials;
+    if (fName == "Admin") {
+      unSuccessful("Name can't be Admin");
+      return;
+    }
+
+    if (password != cpassword) {
+      unSuccessful("Passwords are not matching.");
+      return;
+    }
+    const response = await fetch(
+      `http://${process.env.REACT_APP_HOST}:5000/api/auth/createuser`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: uName,
+          first_name: fName,
+          last_name: lName,
+          email,
+          password,
+          dob,
+          pin_code: pinCode,
+          city: city,
+        }),
+      }
+    );
     const json = await response.json();
     if (json.error) unSuccessful(json.error);
     else {
-      successful("Registration Successful");
+      successful("Registration Successful. Wait for approval by admin.");
       setTimeout(() => {
         navigate(-1);
       }, 3000);
@@ -125,7 +140,12 @@ const SignUp = () => {
               <label>Password</label>
             </div>
             <div className="input-box">
-              <input type="password" onChange={handleOnChange} required />
+              <input
+                type="password"
+                onChange={handleOnChange}
+                name="cpassword"
+                required
+              />
               <label>Confirm Password</label>
             </div>
 
@@ -133,7 +153,7 @@ const SignUp = () => {
               <input
                 type="text"
                 name="city"
-                id=""
+                id="city"
                 onChange={handleOnChange}
                 required
               />

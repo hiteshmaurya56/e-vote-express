@@ -1,14 +1,14 @@
 const express = require("express");
 const userControl = require("../controllers/userController.js");
 const { body, validationResult } = require("express-validator");
-
+const { login, createUser, getUser } = userControl;
 const router = express.Router();
 
 router.post(
   "/createuser",
   [
-    body("username", "Username must be 5 characters long.").isLength({
-      min: 5,
+    body("username", "Username must be 4 characters long.").isLength({
+      min: 4,
     }),
     body("email", "Please enter a valid email.").isEmail(),
     body("password", "Password should be atleast 5 characters long."),
@@ -17,7 +17,7 @@ router.post(
       "First name must be atleast 2 characters long."
     ).isLength({ min: 2 }),
   ],
-  userControl.createUser
+  createUser
 );
 
 router.post(
@@ -26,7 +26,15 @@ router.post(
     body("username", "Username canot be empty.").exists(),
     body("password", "Password cannot be blank.").exists(),
   ],
-  userControl.login
+  login
+);
+
+router.post(
+  "/getuser",
+  [
+    body("username", "Username canot be empty.").exists(),
+  ],
+  getUser
 );
 
 module.exports = router;

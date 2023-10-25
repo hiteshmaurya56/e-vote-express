@@ -1,20 +1,45 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ElectionContext from "../contexts/election/ElectionContext";
 
 const PastElection = () => {
   const { curElection } = useContext(ElectionContext);
-  const { election_name, election_id } = curElection;
+  const { election_name } = curElection;
+  const [results, setResults] = useState([]);
+  const election_id = 123456;
+  const getResults = async () => {
+    const response = await fetch(
+      `http://${process.env.REACT_APP_HOST}:5000/api/election/result`,
+      {
+        method: "GET",
+      }
+    );
+    const json = await response.json();
+    let candidates = [];
+    for (let i = 0; i < json.elections.length; i++) {
+      const element = json.elections[i];
+      if (element.election_id == election_id) {
+        candidates = element.candidates;
+        break;
+      }
+    }
+    console.log(candidates);
+    let n = candidates.length;
+    for (let i = 0; i < n; i++) {
+      for (let j = i + 1; j < n; j++) {
+        if (candidates[i].vote_count < candidates[j].vote_count) {
+          const temp = candidates[i];
+          candidates[i] = candidates[j];
+          candidates[j] = temp;
+        }
+      }
+    }
+    setResults(candidates);
+  };
 
-  const results = [
-    { name: "Hitesh Maurya", votes: 45 },
-    { name: "Vineet Verma", votes: 40 },
-    { name: "Aman Singh", votes: 35 },
-    { name: "Rahul Maurya", votes: 33 },
-    { name: "Alestien Mawrie", votes: 15 },
-    { name: "Chandresh Kumar Maurya", votes: 12 },
-    { name: "Manish Kumar", votes: 7 },
-    { name: "Hazari Triloki", votes: 7 },
-  ];
+  useEffect(() => {
+    getResults();
+  });
+
 
   return (
     <>
@@ -29,12 +54,12 @@ const PastElection = () => {
               <th>No. of Votes</th>
             </tr>
             {results.map((candidate, index) => {
-              const { name, votes } = candidate;
+              const { name, vote_count } = candidate;
               return (
-                <tr>
+                <tr key={index}>
                   <td>{index + 1}</td>
                   <td>{name}</td>
-                  <td>{votes}</td>
+                  <td>{vote_count}</td>
                 </tr>
               );
             })}

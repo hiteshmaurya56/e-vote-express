@@ -2,19 +2,24 @@ import React, { useNavigate } from "react-router-dom";
 import "../css/elections.css";
 import Election from "./Election";
 import photo from "./vv-removebg-preview.png";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import AlertContext from "../contexts/alert/AlertContext";
 
 const Elections = () => {
+  const { unSuccessful } = useContext(AlertContext);
   const [elections, setElections] = useState([]);
   const getElections = async () => {
     if (!localStorage.getItem("token")) navigate("../login");
 
-    const response = await fetch("http://localhost:5000/api/election/getall", {
-      method: "GET",
-      headers: {
-        "auth-token": localStorage.getItem("token"),
-      },
-    });
+    const response = await fetch(
+      `http://${process.env.REACT_APP_HOST}:5000/api/election/getall`,
+      {
+        method: "GET",
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
     const json = await response.json();
     console.log(json);
     setElections(json.elections);
@@ -23,7 +28,9 @@ const Elections = () => {
   useEffect(() => {
     getElections();
   }, []);
+
   const navigate = useNavigate();
+
   const handleClick = (num) => {
     if (num === -1) {
       navigate("/past");
@@ -38,6 +45,7 @@ const Elections = () => {
     pastElections = [],
     upcomingElections = [];
 
+  // const today = new Date('01-01-2024');
   const today = new Date();
   for (let index = 0; index < elections.length; index++) {
     const element = elections[index];
@@ -54,6 +62,12 @@ const Elections = () => {
       upcomingElections.push(element);
     }
   }
+
+  const createElection = () => {
+    if (sessionStorage.getItem("uname") == "Admin") navigate("/newelection");
+    else unSuccessful("You are not admin.");
+  };
+
   const Format = () => {
     return (
       <div className="election-format">
@@ -67,7 +81,9 @@ const Elections = () => {
 
   return (
     <>
-      <button className="create-election">Create a new Election</button>
+      <button className="create-election" onClick={createElection}>
+        Create a new Election
+      </button>
       <section>
         <div className="elections-box">
           <div className="ongoing elections">

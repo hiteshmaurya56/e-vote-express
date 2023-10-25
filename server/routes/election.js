@@ -5,6 +5,7 @@ const {
   result,
   getElections,
   getCandidates,
+  createRequest,
 } = require("../controllers/electionController");
 const { body, validationResult } = require("express-validator");
 const fetchUser = require("../middleware/getuser");
@@ -27,9 +28,8 @@ router.post(
 
 router.get("/getall", fetchUser, getElections);
 router.get("/getallcandidates/:id", fetchUser, getCandidates);
-
 router.post("/vote", fetchUser, vote);
-
 router.get("/result", result);
+router.post("/request", createRequest);
 
 module.exports = router;

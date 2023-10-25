@@ -15,7 +15,9 @@ db.User = require("./User")(sequelize, DataTypes);
 db.Election = require("./Election")(sequelize, DataTypes);
 db.Candidate = require("./Candidate")(sequelize, DataTypes);
 db.Vote = require("./Vote")(sequelize, DataTypes);
-db.Result = require("./Result")(sequelize,DataTypes);
+db.Result = require("./Result")(sequelize, DataTypes);
+db.PendingUser = require("./PendingUser")(sequelize, DataTypes);
+db.Request = require("./Request")(sequelize, DataTypes);
 
 sequelize
   .authenticate()

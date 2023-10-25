@@ -19,21 +19,26 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentials),
-    });
+    const response = await fetch(
+      `http://${process.env.REACT_APP_HOST}:5000/api/auth/login`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      }
+    );
     const json = await response.json();
     console.log(json);
     if (json.error) {
       unSuccessful(json.error);
     } else {
-      localStorage.setItem("token", json.authToken);
-      localStorage.setItem("uname", json.name);
+      sessionStorage.setItem("token", json.authToken);
+      sessionStorage.setItem("uname", json.name);
+      sessionStorage.setItem("username", json.username);
       successful("Login Successful!");
+      
       setTimeout(() => {
         navigate(-1);
       }, 3000);
