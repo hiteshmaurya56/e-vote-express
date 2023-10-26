@@ -3,9 +3,9 @@ import ElectionContext from "../contexts/election/ElectionContext";
 
 const PastElection = () => {
   const { curElection } = useContext(ElectionContext);
-  const { election_name } = curElection;
+  const { election_name,election_id } = curElection;
   const [results, setResults] = useState([]);
-  const election_id = 123456;
+  // const election_id = 123456;
   const getResults = async () => {
     const response = await fetch(
       `http://${process.env.REACT_APP_HOST}:5000/api/election/result`,
@@ -38,7 +38,7 @@ const PastElection = () => {
 
   useEffect(() => {
     getResults();
-  });
+  },[]);
 
 
   return (

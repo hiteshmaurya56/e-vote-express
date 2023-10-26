@@ -18,7 +18,7 @@ const AboutUs = () => {
     let newElection = [];
     for (let i = 0; i < json.elections.length; i++) {
       const element = json.elections[i];
-      if (new Date(element.edate) >= new Date()) {
+      if (new Date(element.edate) < new Date()) {
         continue;
       }
       let election = {};

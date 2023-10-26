@@ -56,15 +56,13 @@ const CreateElection = () => {
       ...election,
       candidates,
     });
-    console.log(election);
-    console.log(election);
     const response = await fetch(
       `http://${process.env.REACT_APP_HOST}:5000/api/election/create`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("token"),
+          "auth-token": sessionStorage.getItem("token"),
         },
         body: JSON.stringify(election),
       }

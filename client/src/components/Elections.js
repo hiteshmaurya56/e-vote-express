@@ -9,14 +9,14 @@ const Elections = () => {
   const { unSuccessful } = useContext(AlertContext);
   const [elections, setElections] = useState([]);
   const getElections = async () => {
-    if (!localStorage.getItem("token")) navigate("../login");
+    if (!sessionStorage.getItem("token")) navigate("../login");
 
     const response = await fetch(
       `http://${process.env.REACT_APP_HOST}:5000/api/election/getall`,
       {
         method: "GET",
         headers: {
-          "auth-token": localStorage.getItem("token"),
+          "auth-token": sessionStorage.getItem("token"),
         },
       }
     );

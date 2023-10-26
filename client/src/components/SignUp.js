@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import "../css/signup.css";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import AlertContext from "../contexts/alert/AlertContext";
@@ -31,12 +30,12 @@ const SignUp = () => {
 
     const { uName, fName, lName, email, password, dob, pinCode, cpassword,city } =
       credentials;
-    if (fName == "Admin") {
+    if (fName === "Admin") {
       unSuccessful("Name can't be Admin");
       return;
     }
 
-    if (password != cpassword) {
+    if (password !== cpassword) {
       unSuccessful("Passwords are not matching.");
       return;
     }

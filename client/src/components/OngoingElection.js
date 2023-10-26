@@ -16,7 +16,7 @@ const OngoingElection = () => {
       `http://${process.env.REACT_APP_HOST}:5000/api/election/getallcandidates/${election_id}`,
       {
         method: "GET",
-        headers: { "auth-token": localStorage.getItem("token") },
+        headers: { "auth-token": sessionStorage.getItem("token") },
       }
     );
     const json = await response.json();
@@ -41,7 +41,7 @@ const OngoingElection = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("token"),
+          "auth-token": sessionStorage.getItem("token"),
         },
         body: JSON.stringify({
           election_id,

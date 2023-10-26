@@ -3,10 +3,8 @@ import "../css/navbar.css";
 import logo from "./logo.png";
 import { ToastContainer } from "react-toastify";
 import "../css/toast.css";
-import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const navigate = useNavigate();
 
 
   return (

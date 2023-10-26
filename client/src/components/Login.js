@@ -30,7 +30,6 @@ const Login = () => {
       }
     );
     const json = await response.json();
-    console.log(json);
     if (json.error) {
       unSuccessful(json.error);
     } else {
@@ -40,7 +39,7 @@ const Login = () => {
       successful("Login Successful!");
       
       setTimeout(() => {
-        navigate(-1);
+        navigate('/elections');
       }, 3000);
     }
   };
