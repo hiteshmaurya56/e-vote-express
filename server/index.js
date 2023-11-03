@@ -5,7 +5,8 @@ const election = require("./routes/election");
 const cors = require("cors");
 
 const app = express();
-const host = "10.241.13.65";
+// const host = "10.241.13.65";
+const host = "localhost";
 const port = 5000;
 app.use(cors());
 app.use(express.json());
