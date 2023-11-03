@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../contexts/user/UserContext";
+import AlertContext from "../contexts/alert/AlertContext";
 
 const Profile = () => {
+  const { user, setUser } = useContext(UserContext);
+  const { successful } = useContext(AlertContext);
   const navigate = useNavigate();
-  const [user, setUser] = useState({});
   const getProfile = async () => {
     const response = await fetch(
       `http://${process.env.REACT_APP_HOST}:5000/api/auth/getuser`,
@@ -26,8 +29,18 @@ const Profile = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("uname");
-    navigate("/login");
+    successful("Logout successful!");
+    setTimeout(() => {
+      navigate("/");
+      window.location.reload();
+    }, 2000);
   };
+
+  const update = () => {
+    console.log("update");
+    navigate("/updateprofile");
+  };
+
   return (
     <>
       <section>
@@ -67,6 +80,11 @@ const Profile = () => {
             <tr>
               <td>Pin Code</td>
               <td>{user.pin_code}</td>
+            </tr>
+            <tr>
+              <td colSpan={2}>
+                <button onClick={update}>Update Profile</button>
+              </td>
             </tr>
             <tr>
               <td colSpan={2}>

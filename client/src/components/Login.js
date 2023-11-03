@@ -37,9 +37,10 @@ const Login = () => {
       sessionStorage.setItem("uname", json.name);
       sessionStorage.setItem("username", json.username);
       successful("Login Successful!");
-      
+
       setTimeout(() => {
-        navigate('/elections');
+        navigate("/");
+        window.location.reload();
       }, 3000);
     }
   };

@@ -8,6 +8,8 @@ const CreateElection = () => {
     election_id: "",
     election_name: "",
     edate: "2023-10-01",
+    start_time: "08:00",
+    end_time: "16:00",
   };
   const [election, setElection] = useState(preElection);
   const { unSuccessful, successful } = useContext(AlertContext);
@@ -73,11 +75,22 @@ const CreateElection = () => {
       setCandidate([]);
       setElection(preElection);
     }
+    console.log(election);
   };
 
   const changeElectionCred = async (event) => {
     const { name, value } = event.target;
     setElection({ ...election, [name]: value });
+  };
+
+  const removeCandidate = async (delCandidate) => {
+   const newCandidates=candidates.filter((candidate) => {
+      console.log(candidate, delCandidate);
+      return candidate != delCandidate;
+    });
+    setCandidates(newCandidates);
+    console.log(newCandidates);
+    console.log(candidates);
   };
 
   return (
@@ -113,12 +126,28 @@ const CreateElection = () => {
                 value={election.edate}
                 onChange={changeElectionCred}
               />
+              <label htmlFor="start_time">Start Time: </label>
+              <input
+                type="time"
+                name="start_time"
+                id="start_time"
+                value={election.start_time}
+                onChange={changeElectionCred}
+              />
+              <label htmlFor="end_time">End Time: </label>
+              <input
+                type="time"
+                name="end_time"
+                id="end_time"
+                value={election.end_time}
+                onChange={changeElectionCred}
+              />
             </div>
             <table border={10}>
               <thead>
                 <tr>
                   <th>Sr. No.</th>
-                  <th>Candidate Username</th>
+                  <th colSpan={2}>Candidate Username</th>
                 </tr>
               </thead>
               <tbody>
@@ -127,12 +156,22 @@ const CreateElection = () => {
                     <tr key={index}>
                       <td>{index + 1}.</td>
                       <td>{candidate}</td>
+                      <td>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            removeCandidate(candidate);
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </td>
                     </tr>
                   );
                 })}
                 <tr>
                   <td>{candidates.length + 1}.</td>
-                  <td>
+                  <td colSpan={2}>
                     <input
                       type="text"
                       name="candiaate"
@@ -143,7 +182,7 @@ const CreateElection = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan={2}>
+                  <td colSpan={3}>
                     <button onClick={addCandidate}>Add Candidate</button>
                   </td>
                 </tr>

@@ -113,4 +113,19 @@ const getUser = async (req, res) => {
     return res.status(200).json({ error: true });
   }
 };
-module.exports = { createUser, login, getUser };
+
+const updateUser = async (req, res) => {
+  console.log(req.body);
+  try {
+    await User.update(req.body, {
+      where: {
+        username: req.body.username,
+      },
+    });
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+module.exports = { createUser, login, getUser, updateUser };
