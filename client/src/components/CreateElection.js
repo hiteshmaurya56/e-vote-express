@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import "../css/createelection.css";
 import AlertContext from "../contexts/alert/AlertContext";
-import { useEffect } from "react";
 const CreateElection = () => {
   const [candidates, setCandidates] = useState([]);
   const [candidate, setCandidate] = useState("");
@@ -50,7 +49,6 @@ const CreateElection = () => {
 
   const createElection = async (e) => {
     e.preventDefault();
-    const { election_id, election_name } = election;
 
     setElection({
       ...election,

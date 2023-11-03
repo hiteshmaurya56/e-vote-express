@@ -83,7 +83,7 @@ const OngoingElection = () => {
     );
   };
 
-  return error == false ? (
+  return error === false ? (
     <div className="voting">
       <h1>Election Name: {election_name}</h1>
       <h2>Election ID: {election_id}</h2>

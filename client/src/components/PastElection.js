@@ -17,12 +17,11 @@ const PastElection = () => {
     let candidates = [];
     for (let i = 0; i < json.elections.length; i++) {
       const element = json.elections[i];
-      if (element.election_id == election_id) {
+      if (element.election_id === election_id) {
         candidates = element.candidates;
         break;
       }
     }
-    console.log(candidates);
     let n = candidates.length;
     for (let i = 0; i < n; i++) {
       for (let j = i + 1; j < n; j++) {

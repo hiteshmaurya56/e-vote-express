@@ -43,7 +43,7 @@ const AboutUs = () => {
 
   useEffect(() => {
     getResults();
-  }, []);
+  },[]);
 
   if (!sessionStorage.getItem("token")) navigate("../login");
   return elections.length > 0 ? (

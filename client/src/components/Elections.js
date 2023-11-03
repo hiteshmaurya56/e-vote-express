@@ -50,8 +50,8 @@ const Elections = () => {
   for (let index = 0; index < elections.length; index++) {
     const element = elections[index];
     const { edate, start_time, end_time } = element;
-    // const sDate = new Date(`${edate} ${start_time}`);
-    const sDate = new Date(`${edate} 00:00:00`);
+    const sDate = new Date(`${edate} ${start_time}`);
+    // const sDate = new Date(`${edate} 00:00:00`);
     const eDate = new Date(`${edate} ${end_time}`);
 
     if (today >= sDate && today <= eDate) {
@@ -64,7 +64,7 @@ const Elections = () => {
   }
 
   const createElection = () => {
-    if (sessionStorage.getItem("uname") == "Admin") navigate("/newelection");
+    if (sessionStorage.getItem("uname") === "Admin") navigate("/newelection");
     else unSuccessful("You are not admin.");
   };
 

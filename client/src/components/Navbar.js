@@ -29,7 +29,7 @@ const Navbar = () => {
         <nav className="navbar">
           <ul className="navbar-list">
             <li>
-              {sessionStorage.getItem("uname") != "Admin" ? (
+              {sessionStorage.getItem("uname") !== "Admin" ? (
                 <a className="navbar-link" href="/">
                   Home
                 </a>
@@ -40,7 +40,7 @@ const Navbar = () => {
               )}
             </li>
             <li>
-              {sessionStorage.getItem("uname") == "Admin" ? (
+              {sessionStorage.getItem("uname") === "Admin" ? (
                 <a className="navbar-link" href="/registrations">
                   Registrations
                 </a>
@@ -51,7 +51,7 @@ const Navbar = () => {
               )}
             </li>
             <li>
-              {sessionStorage.getItem("uname") == "Admin" ? (
+              {sessionStorage.getItem("uname") === "Admin" ? (
                 <a className="navbar-link" href="/requests">
                   Requests
                 </a>
@@ -62,7 +62,7 @@ const Navbar = () => {
               )}
             </li>
             <li>
-              {sessionStorage.getItem("uname") == "Admin" ? (
+              {sessionStorage.getItem("uname") === "Admin" ? (
                 <a className="navbar-link" href="/allusers">
                   All Users
                 </a>
