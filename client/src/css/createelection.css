@@ -9,8 +9,8 @@ section.create-election {
         margin: 10px auto;
 
         & form {
-            
-        background-color: rgba(0,0,0,0.3);
+
+            background-color: rgba(0, 0, 0, 0.5);
             min-width: 40vw;
             border: 2px solid rgb(195, 161, 111);
             border-radius: 5px;

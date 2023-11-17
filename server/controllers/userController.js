@@ -116,6 +116,8 @@ const getUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   console.log(req.body);
+  const salt = await bcrypt.genSalt(10);
+  req.body.password = await bcrypt.hash(req.body.password, salt);
   try {
     await User.update(req.body, {
       where: {

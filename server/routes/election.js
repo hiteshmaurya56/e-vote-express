@@ -21,7 +21,7 @@ router.post(
     ).isLength({ min: 2 }),
     body("election_name", "Election name should not be empty.").exists(),
     body("edate", "Election date should not be empty.").exists(),
-    body("candidates", "Candidates list should note be empty").isArray(),
+    body("candidates", "Candidates list should not be empty").isArray(),
   ],
   create
 );

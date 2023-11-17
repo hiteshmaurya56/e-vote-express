@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../css/contact.css";
 import { useNavigate } from "react-router-dom";
+import AlertContext from "../contexts/alert/AlertContext";
 
 const ContactUs = () => {
   const [request, setRequest] = useState({ title: "", description: "" });
+  const { successful, unSuccessful } = useContext(AlertContext);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -31,7 +33,7 @@ const ContactUs = () => {
       }
     );
     const json = await response.json();
-    console.log(json);
+    successful("Your request has been submitted successfully!");
     setRequest({ title: "", description: "" });
   };
 

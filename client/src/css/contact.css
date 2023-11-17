@@ -27,7 +27,7 @@
         }
 
         & textarea {
-background-color: rgba(0,0,0,0.3);
+            background-color: rgba(0, 0, 0, 0.5);
             min-width: 60vh;
             margin: 10px auto;
             color: rgb(195, 161, 111);

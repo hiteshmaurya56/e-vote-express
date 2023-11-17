@@ -39,7 +39,6 @@ const create = async (req, res) => {
       const candidate = candidates[index];
       newCandidates.push({ username: candidate, election_id });
     }
-    console.log(newCandidates);
 
     await Candidate.bulkCreate(newCandidates);
 
@@ -92,7 +91,6 @@ const getCandidates = async (req, res) => {
         index
       ].dataValues.name = `${user.first_name} ${user.last_name}`;
 
-      console.log(candidates[index]);
     }
     return res.status(200).json({ candidates });
   } catch (error) {
@@ -146,7 +144,6 @@ const result = async (req, res) => {
     for (let i = 0; i < elections.length; i++) {
       elections[i] = elections[i].dataValues;
     }
-    console.log(elections);
     for (let i = 0; i < elections.length; i++) {
       let candidate = await Candidate.findAll({
         where: {
@@ -176,10 +173,8 @@ const result = async (req, res) => {
 
 // ################################################################
 const createRequest = async (req, res) => {
-  console.log(req.body);
   try {
     const request = await Request.create(req.body);
-    console.log(request);
     res.status(200).json(request);
   } catch (error) {
     res.status(400).json({ error });

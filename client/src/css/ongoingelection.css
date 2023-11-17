@@ -15,13 +15,18 @@ h2 {
 }
 
 table {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.5);
     border: 3px solid rgb(195, 161, 111);
     font-size: 1.9em;
     color: rgb(195, 161, 111);
     margin: 20px auto;
     padding: 10px;
     min-width: 30%;
+
+    & th {
+        padding: 20px;
+        text-align: center;
+    }
 
     & td {
         padding: 20px;

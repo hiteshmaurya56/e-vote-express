@@ -3,9 +3,9 @@ import "../css/navbar.css";
 import logo from "./logo.png";
 import { ToastContainer } from "react-toastify";
 import "../css/toast.css";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
-
 
   return (
     <>
@@ -23,66 +23,66 @@ const Navbar = () => {
         theme="colored"
       />
       <header className="header">
-        <a href="/">
+        <Link to="/">
           <img src={logo} alt="eVoteExpress" className="logo" />
-        </a>
+        </Link>
         <nav className="navbar">
           <ul className="navbar-list">
             <li>
               {sessionStorage.getItem("uname") !== "Admin" ? (
-                <a className="navbar-link" href="/">
+                <Link className="navbar-link" to="/">
                   Home
-                </a>
+                </Link>
               ) : (
-                <a className="navbar-link" href="/elections">
+                <Link className="navbar-link" to="/elections">
                   Elections
-                </a>
+                </Link>
               )}
             </li>
             <li>
               {sessionStorage.getItem("uname") === "Admin" ? (
-                <a className="navbar-link" href="/registrations">
+                <Link className="navbar-link" to="/registrations">
                   Registrations
-                </a>
+                </Link>
               ) : (
-                <a className="navbar-link" href="/elections">
+                <Link className="navbar-link" to="/elections">
                   Elections
-                </a>
+                </Link>
               )}
             </li>
             <li>
               {sessionStorage.getItem("uname") === "Admin" ? (
-                <a className="navbar-link" href="/requests">
+                <Link className="navbar-link" to="/requests">
                   Requests
-                </a>
+                </Link>
               ) : (
-                <a className="navbar-link" href="/results">
+                <Link className="navbar-link" to="/results">
                   Results
-                </a>
+                </Link>
               )}
             </li>
             <li>
               {sessionStorage.getItem("uname") === "Admin" ? (
-                <a className="navbar-link" href="/allusers">
+                <Link className="navbar-link" to="/allusers">
                   All Users
-                </a>
+                </Link>
               ) : (
-                <a className="navbar-link" href="/contactus">
+                <Link className="navbar-link" to="/contactus">
                   Contact Us
-                </a>
+                </Link>
               )}
             </li>
             {!sessionStorage.getItem("token") ? (
               <li>
-                <a className="navbar-link" href="/login">
+                <Link className="navbar-link" to="/login">
                   Login
-                </a>
+                </Link>
               </li>
             ) : (
               <li>
-                <a className="navbar-link" href="/profile">
+                <Link className="navbar-link" to="/profile">
                   {sessionStorage.getItem("uname")}
-                </a>
+                </Link>
               </li>
             )}
           </ul>

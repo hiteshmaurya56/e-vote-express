@@ -7,7 +7,7 @@ const CreateElection = () => {
   const preElection = {
     election_id: "",
     election_name: "",
-    edate: "2023-10-01",
+    edate: new Date().toISOString().slice(0, 10),
     start_time: "08:00",
     end_time: "16:00",
   };
@@ -52,10 +52,8 @@ const CreateElection = () => {
   const createElection = async (e) => {
     e.preventDefault();
 
-    setElection({
-      ...election,
-      candidates,
-    });
+    let newElection = election;
+    newElection.candidates = candidates;
     const response = await fetch(
       `http://${process.env.REACT_APP_HOST}:5000/api/election/create`,
       {
@@ -64,7 +62,7 @@ const CreateElection = () => {
           "Content-Type": "application/json",
           "auth-token": sessionStorage.getItem("token"),
         },
-        body: JSON.stringify(election),
+        body: JSON.stringify(newElection),
       }
     );
     const json = await response.json();
@@ -84,7 +82,7 @@ const CreateElection = () => {
   };
 
   const removeCandidate = async (delCandidate) => {
-   const newCandidates=candidates.filter((candidate) => {
+    const newCandidates = candidates.filter((candidate) => {
       console.log(candidate, delCandidate);
       return candidate != delCandidate;
     });

@@ -64,8 +64,7 @@ const Elections = () => {
   }
 
   const createElection = () => {
-    if (sessionStorage.getItem("uname") === "Admin") navigate("/newelection");
-    else unSuccessful("You are not admin.");
+    navigate("/newelection");
   };
 
   const Format = () => {
@@ -81,9 +80,11 @@ const Elections = () => {
 
   return (
     <>
-      <button className="create-election" onClick={createElection}>
-        Create a new Election
-      </button>
+      {sessionStorage.getItem("uname") === "Admin" && (
+        <button className="create-election" onClick={createElection}>
+          Create a new Election
+        </button>
+      )}
       <section>
         <div className="elections-box">
           <div className="ongoing elections">
