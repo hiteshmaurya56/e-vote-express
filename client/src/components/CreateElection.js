@@ -53,6 +53,12 @@ const CreateElection = () => {
     e.preventDefault();
 
     let newElection = election;
+    const today = new Date();
+    const electionDate = new Date(`${election.edate} ${election.start_time}`);
+    if (electionDate < today) {
+      unSuccessful("Please enter valid date and time.");
+      return;
+    }
     newElection.candidates = candidates;
     const response = await fetch(
       `http://${process.env.REACT_APP_HOST}:5000/api/election/create`,
@@ -70,10 +76,9 @@ const CreateElection = () => {
       unSuccessful(json.error);
     } else {
       successful("Election has been created successfully.");
-      setCandidate([]);
+      setCandidates([]);
       setElection(preElection);
     }
-    console.log(election);
   };
 
   const changeElectionCred = async (event) => {
